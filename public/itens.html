@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME</title>
+    <style>
+        h1{
+            color :rgb(200, 136, 253), 
+           
+        }
+ 
+         
+        button{
+       background-color: rgb(164, 144, 187);
+       color: black;
+       border-radius: 8px;
+       padding: 15px;
+      }
+
+    </style>
+</head>
+<body>
+   <center> <h1>Visao Geral</h1> </center>
+   <center> <h2>Veja todos os usuarios listados a baixo:</h2> </center>
+
+   <div id="status">carregando...</div>
+  <div id="lista">
+  </div>
+   
+   
+   <script>
+        async function carregarPessoas() {
+          const response = await fetch("/pessoas");
+          console.log(response)
+  
+  
+          const elemento = document.getElementById("status")
+          if (!response.ok){
+           
+            elemento.textContent = "Nâo foi possivel carregar as pessoas ";
+          }
+          elemento.textContent = "Pessoas carregadas com sucesso";
+        }
+
+       async function mostrarFormulario(){
+          const reponse = await fetch("/pessoas");
+          const elemento = document.getElementById("status")
+          
+
+          if(response.ok){
+          elemeto.textContent = "Não foi possieveç carregar as pessoas"
+         }
+
+          elemto.textContent = "Pessoas garregadas com sucesso"
+
+      
+
+         const pessoas= await response.json();
+         console.log=("\nResponses: " ,response,
+         "\n pessoas " , pessoas);
+         const conteiner = documet.getElementById("lista")
+
+         for(let c=0 ; c<pessoas.length ; c++){
+          const pessoa= pessoa[c]
+          const texto = `NOME : ${pessoa.nome} -- ${pessoas.login}`
+          const li = document.createElement("li")
+          li.textContent = texto
+          
+         }
+         ul.appendChild(ul)
+        }
+
+
+        carregarPessoas();
+
+    
+      </script>
+  
+
+  <button onclik="mostrarFormulario() ">+ Criar pessoa</button>
+</div></center>
+
+
+</body>
+</html>
