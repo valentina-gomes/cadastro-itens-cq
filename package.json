@@ -2,6 +2,7 @@
   "dependencies": {
     "express": "^5.1.0",
     "patch": "^0.0.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "xpress": "^2.4.6"
   }
 }
