@@ -1,0 +1,28 @@
+input{
+    border-radius: 5px;
+    width: 40;
+    height: 30;
+    margin-bottom: 13px;
+}
+
+#criar{
+   
+        background-color: rgb(188, 163, 216);
+        color: black;
+        border-radius: 6px;
+        padding: 6px;
+        width: 160px;
+      
+}
+
+li:hover{
+    background-color:  rgb(164, 144, 187);
+}
+
+#deletarPessoa{
+    margin-right: 185px;
+}
+
+h1{
+    color: rgb(170, 126, 211);
+}

@@ -6,6 +6,7 @@ const app = express();
 const PORT = 3000;
 app.use(express.json());
 app.use(express.urlencoded({extemded:true}));
+app.use(express.static(path.join(__dirname, './public')))
 const publicDir = path.join(__dirname, './public');
 
 let pessoas = [
@@ -195,7 +196,16 @@ app.post("/pessoa", (req, res) => {
   res.json(pessoas);
   })
 
-
+app.get("/pessoas/:id" ,(req,res) =>{
+    const id = parseInt(req.params.id);
+    const pessoa = pessoas.find((u) => u.id === id);
+  
+    if (!pessoa) {
+      return res.status(404).json({ error: "Usuario não encontrado" });
+    }
+  
+    res.json(pessoa);
+})
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

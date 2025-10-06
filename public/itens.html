@@ -2,15 +2,12 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HOME</title>
-  <style>
-    h1 {
-      color: rgb(200, 136, 253),
 
-    }
-  </style>
+  <link rel="stylesheet" href= "style.css" />
+  
 </head>
 
 <body>
@@ -22,89 +19,88 @@
   </center>
 
   <div id="status">carregando...</div>
-  <div id="lista">
-  </div>
+  <div id="lista"></div>
 
-  <form id='formulario' style="display: none" onsubmit="adicionarPessoas(event)">
-
+  <form id="formulario" style="display: none" onsubmit="adicionarPessoas(event)"> <center>
     <label>Nome:</label>
     <input type="text" id="nome" name="nome" required />
-    <br>
+    <br />
 
     <label>Login:</label>
     <input type="text" id="login" name="login" required />
-    <br>
+    <br />
 
     <label>Idade:</label>
     <input type="number" id="idade" name="idade" />
-    <br>
+    <br />
 
     <label>Cidade:</label>
     <input type="text" id="cidade" name="cidade" />
-    <br>
+    <br />
 
     <label>Senha:</label>
     <input type="password" id="senha" name="senha" required />
-    <br>
+    <br />
 
-    <button id='criar' onclick="adicionarPessoa()" type=submit>Criar</button>
-  </form>
+    <button id="criar" onclick="adicionarPessoa()" type="submit">
+      Criar
+    </button>
+  </form></center>
 
-  <button id='botao' onclick="mostrarFormulario() ">+ Criar pessoa</button>
-  <button id="delete" onclick="deletarPessoa()" type=submit>❌</button>
+  <button id="botao" onclick="mostrarFormulario() ">+ Criar pessoa</button>
+  <button id="delete" onclick="deletarPessoa()" type="submit">❌</button>
 
-
+  <div id="mostrarPessoas">
+    <h4>Selecione uma pessoa para ver os detalhes</h4>
+    >
+  </div>
 
   <script>
     async function carregarPessoas() {
       const response = await fetch("/pessoas");
 
-      const elemento = document.getElementById("status")
+      const elemento = document.getElementById("status");
       if (!response.ok) {
-
         elemento.textContent = "Nâo foi possivel carregar as pessoas ";
       }
       elemento.textContent = "Pessoas carregadas com sucesso";
 
       const pessoas = await response.json();
 
-      const conteiner = document.getElementById("lista")
-      const ul = document.createElement("ul")
-
+      const conteiner = document.getElementById("lista");
+      const ul = document.createElement("ul");
 
       for (let c = 0; c < pessoas.length; c++) {
-        const pessoa = pessoas[c]
-        const texto = `NOME : ${pessoa.nome} -- ${pessoa.login}`
+        const pessoa = pessoas[c];
+        const texto = `NOME : ${pessoa.nome} -- ${pessoa.login}`;
 
-        const li = document.createElement("li")
+        const li = document.createElement("li");
 
+        const botaoDelete = document.createElement("button");
+        botaoDelete.textContent = "❌";
+        botaoDelete.onclick = () => deletarPessoa(pessoa.id, li);
 
-        const botaoDelete = document.createElement("button")
-        botaoDelete.textContent = "❌"
-        botaoDelete.style.merginleft = "9px"
-        botaoDelete.onclick = () => deletarPessoa(pessoa.id, li)
+        const span = document.createElement("span");
+        span.textContent = texto;
+        span.onclick = () => carregarUsuario(pessoa.id, li);
 
-        const span = document.createElement("span")
-        span.textContent = texto
-
-        li.appendChild(span)
-        li.appendChild(botaoDelete)
-        ul.appendChild(li)
+        li.appendChild(span);
+        li.appendChild(botaoDelete);
+        ul.appendChild(li);
       }
-      conteiner.appendChild(ul)
+      conteiner.appendChild(ul);
     }
 
     carregarPessoas();
 
     function mostrarFormulario() {
-      const formulario = document.getElementById("formulario")
-      const botao = document.getElementById("botao")
+      const formulario = document.getElementById("formulario");
+      const botao = document.getElementById("botao");
 
       if (formulario.style.display == "none") {
         formulario.style.display = "block";
         botao.innerText = "Ocultar formulario";
-      }
-      else {
+      } else {
         formulario.style.display = "none";
         botao.innerText = "+ Criar pessoa";
       }
@@ -122,10 +118,8 @@
         return;
       }
 
-
       const novaPessoa = { nome, login };
       adicionarPessoaNaLista(novaPessoa);
-
 
       document.getElementById("formulario").reset();
       document.getElementById("formulario").style.display = "none";
@@ -136,7 +130,6 @@
       const container = document.getElementById("lista");
       let ul = container.querySelector("ul");
 
-
       if (!ul) {
         ul = document.createElement("ul");
         container.appendChild(ul);
@@ -146,40 +139,60 @@
       li.textContent = `NOME: ${pessoa.nome}  -- ${pessoa.login}`;
       ul.appendChild(li);
 
+      const botaoDelete = document.createElement("button");
+      botaoDelete.textContent = "❌";
+      botaoDelete.style.merginleft = "9px";
+      botaoDelete.onclick = () => deletarPessoa(pessoa.id, li);
 
-      const botaoDelete = document.createElement("button")
-      botaoDelete.textContent = "❌"
-      botaoDelete.style.merginleft = "9px"
-      botaoDelete.onclick = () => deletarPessoa(pessoa.id, li)
+      const span = document.createElement("span");
+      span.onclick = () => carregarUsuario(pessoa.id, li);
 
-      const span = document.createElement("span")
-
-      li.appendChild(span)
-      li.appendChild(botaoDelete)
-      ul.appendChild(li)
+      li.appendChild(span);
+      li.appendChild(botaoDelete);
+      ul.appendChild(li);
     }
 
-
-
     async function deletarPessoa(id, li) {
-
-      const response = await fetch(`/pessoa/${id}` , {
-        method: "DELETE"
+      const response = await fetch(`/pessoa/${id}`, {
+        method: "DELETE",
       });
 
       if (response.ok) {
-        alert("Pessoa deletada com sucesso")
-        li.remove()
-      }
-
-      else {
-        alert("Erro ao deletar pessoa")
+        alert("Pessoa deletada com sucesso");
+        li.remove();
+      } else {
+        alert("Erro ao deletar pessoa");
       }
     }
 
+    async function carregarUsuario(id, li) {
+      const response = await fetch(`/pessoas/${id}`, {
+        method: "GET",
+      });
 
+      const mostrarPessoas = document.getElementById("mostrarPessoas");
+      const pessoa = await response.json();
+     
+      if (response.ok) {
+       console.log(pessoa)
+      } 
+     
+      else{
+        alert("Erro ao expecionar  pessoa");
+      }
+
+      mostrarPessoas.innerHTML = `<h4> Delhes das Pessoas </h4>
+        <p><strong>ID:</strong> ${pessoa.id}</p>
+        <p><strong>Nome:</strong> ${pessoa.nome}</p>
+        <p><strong>Login:</strong> ${pessoa.login}</p>
+        <p><strong>Idade:</strong> ${pessoa.idade}</p>
+        <p><strong>Irmaos:</strong> ${pessoa.irmaos}</p>
+        <p><strong>Cidade:</strong> ${pessoa.cidade}</p>
+        <p><strong>Hobby:</strong> ${pessoa.hobby}</p>
+      `;
+     
+    }
   </script>
-
 </body>
 
 </html>
